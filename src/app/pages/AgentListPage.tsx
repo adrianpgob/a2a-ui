@@ -12,6 +12,7 @@ import {A2AClient} from "@/a2a/client";
 import {AgentCard} from "@/a2a/schema";
 import {useHostState} from "@/a2a/state/host/hostStateContext";
 import {HostState} from "@/a2a/state/host/HostState";
+import { createProxyFetch } from "@/lib/proxy-fetch";
 
 type Props = {
     openConversation: (conversation: StateConversation) => void;
@@ -38,7 +39,7 @@ export default function AgentListPage() {
             // Assuming AgentCard is a TypeScript type for your agent data
             const newAgent: AgentCard = await new A2AClient(
                 newAgentUrl,
-                window.fetch.bind(window)
+                createProxyFetch()
             ).agentCard();
 
             // Update state with the new agent

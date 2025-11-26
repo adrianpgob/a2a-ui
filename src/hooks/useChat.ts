@@ -4,6 +4,7 @@ import { A2AClient } from "@/a2a/client";
 import { TaskSendParams, Message, Part, Artifact, MessageSendParams, MessageSendConfiguration } from "@/a2a/schema";
 import { v4 as uuidv4 } from "uuid";
 import {AgentCard, Task, TaskQueryParams, TextPart} from "@/a2a/schema";
+import { createProxyFetch } from "@/lib/proxy-fetch";
 
 interface UseChatProps {
     agentUrl?: string;
@@ -174,7 +175,7 @@ export const useChat = ({ agentUrl, isStreamingEnabled = false, contextId }: Use
 
     // Обычная отправка сообщения (новая схема)
     const sendMessageSync = useCallback(async (content: string) => {
-        const client = new A2AClient(agentUrl!, window.fetch.bind(window));
+        const client = new A2AClient(agentUrl!, createProxyFetch());
         const messageId = uuidv4();
         
         // Получаем историю сообщений
@@ -261,7 +262,7 @@ export const useChat = ({ agentUrl, isStreamingEnabled = false, contextId }: Use
 
     // Стриминговая отправка сообщения (старая схема с TaskSendParams)
     const sendMessageStream = useCallback(async (content: string) => {
-        const client = new A2AClient(agentUrl!, window.fetch.bind(window));
+        const client = new A2AClient(agentUrl!, createProxyFetch());
         const taskId = uuidv4();
         const messageId = uuidv4();
         
